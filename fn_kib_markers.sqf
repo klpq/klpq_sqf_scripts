@@ -1,4 +1,4 @@
-//0 = [this] spawn KIB_fnc_kib_markers;
+//0 = [this, "o_recon","ColorRed","racoon",0.6] spawn KIB_fnc_kib_markers;
 
 
 //1: _vehicle - техника, если ставите в инит техники, то прописывайте this
