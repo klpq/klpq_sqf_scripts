@@ -1,7 +1,7 @@
 //0 = [this, "o_recon","ColorRed","racoon",0.6] spawn KIB_fnc_kib_markers;
 
 
-//1: _vehicle - техника, если ставите в инит техники, то прописывайте this
+//1: _entity - техника, если ставите в инит техники, то прописывайте this
 //2: "o_recon" - тип маркера (дефолт "o_unknown")
 //3: "ColorRed" - цвет маркера (дефолт "ColorGrey")
 //4: "racoon" - опциональная подпись маркера, если не нужна то оставляйте пустую строку ""
@@ -29,16 +29,14 @@
 // ColorBlue
 // ColorPink
 
-
-params ["_vehicle",["_markertype","o_unknown"],["_markerColor","ColorGrey"],["_markeText",""],["_markerTransparency",0.5],["_placed",false]];
+//0 = [this, "b_inf","ColorYellow","SL",0.6] spawn KIB_fnc_kib_markers; 
+params ["_entity",["_markertype","o_unknown"],["_markerColor","ColorGrey"],["_markeText",""],["_markerTransparency",0.5],["_placed",false]];
 
 if (!isServer) exitWith {};
 
 
-waitUntil {time > 1};
-
+waitUntil {time > 2};
 _s = str random 100;
-
 _marker = if (typeName _placed == "STRING") then [{ _placed },{createMarker [_s, [0,0,0]]}];
 
 if (typeName _placed != "STRING") then {
@@ -48,21 +46,37 @@ if (typeName _placed != "STRING") then {
     _marker setMarkerAlpha _markerTransparency;
 };
 
-while{not isnull _vehicle} do {
+while{not isnull _entity} do {
+        _exit = false;
         waitUntil{
-            if (!alive _vehicle) exitWith { 
+            _pos = _entity call CBA_fnc_getPos; 
+            if ([_pos, "", {_accumulator + (str _x)}] call CBA_fnc_inject == "000" && typeName _entity == "GROUP") then { 
+                waitUntil{                    
+                    if ([_entity call CBA_fnc_getPos, "", {_accumulator + (str _x)}] call CBA_fnc_inject != "000") exitWith {
+                         true;
+                         };
+                    sleep 40;                    
+                    false;
+                };                            
+            };  
+            if (typeName _entity == "OBJECT") then {
+               if (!alive _entity) exitWith { 
                 if (typeName _placed == "STRING")then [{
-                     true; 
-                }, {
-                _marker setMarkerColor "ColorBlack";
-                _marker setMarkerAlpha 0.3;
-                sleep 30;
-                deletemarker _marker;  
-                true; 
-                }];               
-            };            
-            _marker setmarkerpos getpos _vehicle;
-            sleep 1;            
+                        true; 
+                    }, {
+                        _marker setMarkerColor "ColorBlack";
+                        _marker setMarkerAlpha 0.3;
+                        sleep 40;                        
+                        deletemarker _marker;  
+                        _exit = true;
+                        true; 
+                    }];               
+                };
+            };                           
+            _marker setmarkerpos _pos;          
+            if (typeName _entity == "GROUP") then [{sleep 25}, {sleep 2}];
+            if (_exit) exitWith {_exit};      
             false;
-        };                   
+        };      
+        if (_exit) exitWith {_exit};              
 };
