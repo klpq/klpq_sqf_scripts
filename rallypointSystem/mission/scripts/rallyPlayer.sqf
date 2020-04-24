@@ -118,10 +118,10 @@ rallySystem = {
 
                                if ( [getMarkerPos [(call getGrpStr+"Marker"), true], "", {_accumulator + (str _x)}] call CBA_fnc_inject == "000") then [{
                                        [] call klpq_fnc_revivePlayers_rallyPoint;
-                                       systemChat "on base";
+                                       systemChat "player respawned on base";
                                }, {
                                        [getMarkerPos (call getGrpStr+"Marker")] call klpq_fnc_revivePlayers_rallyPoint;
-                                       systemChat "on rally";
+                                       systemChat "player respawned on rally";
                                }];
                        }];  
                 };
@@ -133,7 +133,7 @@ rallySystem = {
 
                 //rallypoint handler
                 _action = ["respawnRally","Place Rallypoint", "",{
-                        systemChat "rally";                      
+                        //systemChat "rally";                      
                         if ([getMarkerPos [(call getGrpStr+"Marker"), true], "", {_accumulator + (str _x)}] call CBA_fnc_inject == "000") then [{
                                         _s = (call getGrpStr+"Marker");
                                         _marker =createMarker [_s, player call CBA_fnc_getPos];

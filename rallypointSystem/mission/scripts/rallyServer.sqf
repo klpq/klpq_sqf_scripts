@@ -1,13 +1,8 @@
 
-
-
 waitUntil {time > 2};
 
 if (!isServer) exitWith {};
 
-
-
-["bepis activated!"] remoteExec ["systemchat", -2, true]; 
 
 [rallySystem] remoteExec ["call", -2, true];
  
@@ -27,10 +22,5 @@ klpq_rally_changeRespawnTickets = {
                         publicVariable _x;                                                             
                 };
         }forEach allVariables missionnamespace;
-        systemChat format["Respawn tickets changed for all groups by: %1", _num];  
+        [format["Respawn tickets changed for all groups by: %1", _num]]  remoteExec ["systemchat", -2, true];        
 };
-
-
-
-
-
